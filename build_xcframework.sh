@@ -80,7 +80,6 @@ OPENSSL_NO_FLAGS=(
     no-gost
     no-ktls
     no-fips
-    no-legacy
     no-ec_nistp_64_gcc_128
 
     # 引擎 / 动态模块（静态库不需要）
