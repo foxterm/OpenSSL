@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文文档](README_CN.md)
 
-A size-optimized OpenSSL static library for the FoxTerm app — built from [OpenSSL 3.6.5](https://github.com/openssl/openssl) with algorithms precisely trimmed based on actual API usage in libssh and libvncserver.
+A size-optimized OpenSSL static library for the FoxTerm app — built from [OpenSSL 4.0.3](https://github.com/openssl/openssl) with algorithms precisely trimmed based on actual API usage in libssh and libvncserver.
 
 > This library is a dedicated core component for the [FoxTerm](https://foxterm.app/) app. Download it here: [https://foxterm.app/](https://foxterm.app/)
 
