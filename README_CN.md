@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文文档](README_CN.md)
 
-FoxTerm APP 专用 OpenSSL 静态库，基于 [OpenSSL 3.6.5](https://github.com/openssl/openssl)，通过扫描 libssh 和 libvncserver 实际使用的 API 精确裁剪，追求最小二进制体积。
+FoxTerm APP 专用 OpenSSL 静态库，基于 [OpenSSL 4.0.3](https://github.com/openssl/openssl)，通过扫描 libssh 和 libvncserver 实际使用的 API 精确裁剪，追求最小二进制体积。
 
 > 本库为 [FoxTerm](https://foxterm.app/) APP 专用核心组件，欢迎下载使用：[https://foxterm.app/](https://foxterm.app/)
 
