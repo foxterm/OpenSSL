@@ -6,6 +6,7 @@
 #include <openssl/kdf.h>
 #include <openssl/pem.h>
 #include <openssl/asyncerr.h>
+#include <openssl/ech.h>
 #include <openssl/md2.h>
 #include <openssl/ssl3.h>
 #include <openssl/ossl_typ.h>
@@ -74,6 +75,7 @@
 #include <openssl/pkcs7.h>
 #include <openssl/obj_mac.h>
 #include <openssl/ct.h>
+#include <openssl/posix_time.h>
 #include <openssl/async.h>
 #include <openssl/buffer.h>
 #include <openssl/ssl.h>
