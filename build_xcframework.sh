@@ -5,7 +5,7 @@ set -e
 export GIT_ADVICE_DETACHED_HEAD=false
 
 # ================= 配置区 =================
-OPENSSL_VERSION="openssl-3.6.5"
+OPENSSL_VERSION="openssl-4.0.3"
 MACOS_TARGET="14.0"
 IOS_TARGET="17.0"
 
