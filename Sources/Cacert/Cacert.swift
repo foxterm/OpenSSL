@@ -8,7 +8,7 @@ import OpenSSL
 /// OpenSSL CA 凭证管理与加载相关错误
 public enum OpenSSLCACertificateError: LocalizedError, Sendable {
     case bundlePathNotFound
-    case failedToSetVerifyLocations(path: String, opensslError: UInt32)
+    case failedToSetVerifyLocations(path: String, opensslError: UInt)
     case invalidContextPointer
 
     public var errorDescription: String? {
@@ -28,32 +28,11 @@ public final class CacertManager: Sendable {
     /// 标准全局共享实例
     public static let shared = CacertManager()
 
-    private let cachedCertPath: String?
+    private let cachedCertPath = Bundle.module.path(forResource: "cacert", ofType: "pem")
 
     /// 初始化管理器（支持依赖注入以利单元测试）
-    /// - Parameters:
-    ///   - fileManager: 用于检索文件系统的 FileManager
-    ///   - bundle: 资源所在的 Bundle（默认使用 SPM 的 Bundle.module）
-    public init(fileManager: FileManager = .default, bundle: Bundle = .module) {
-        cachedCertPath = Self.locateCertificate(using: fileManager, bundle: bundle)
-    }
-
-    private static func locateCertificate(using fileManager: FileManager, bundle: Bundle) -> String? {
-        // 1. 优先检查 SPM 的 Bundle.module 资源包
-        if let path = bundle.path(forResource: "cacert", ofType: "pem") {
-            return path
-        }
-
-        // 2. 备用方案：检查 Application Support（未来可支持动态更新下载凭证）
-        if let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-            let customPath = appSupport.appendingPathComponent("cacert.pem").path
-            if fileManager.fileExists(atPath: customPath) {
-                return customPath
-            }
-        }
-
-        return nil
-    }
+    /// - Parameter fileManager: 用于检索文件系统的 FileManager
+    public init() {}
 
     /// 目前生效的凭证文件绝对路径
     public var certificatePath: String? {
