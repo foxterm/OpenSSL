@@ -67,17 +67,16 @@ CMake 中指定：
 
 ## CA 凭证管理
 
-`CacertManager`（位于 `Sources/Cacert/`）内嵌 `cacert.pem`，并将其加载到 OpenSSL 的 `SSL_CTX` 中用于 TLS 证书验证。凭证路径优先从 `Bundle.module` 解析，其次回退到 Application Support 目录。
+`CacertManager`（位于 `Sources/Cacert/`）内嵌 `cacert.pem`，并将其加载到 OpenSSL 的 `SSL_CTX` 中用于 TLS 证书验证。
 
 ```swift
-import OpenSSL
+import Cacert
 
-do {
-    let ctx = SSL_CTX_new(TLS_client_method())
-    try CacertManager.shared.configure(ctx)
-} catch {
-    // 這裡使用 FoxTerm 自己的日誌系統記錄錯誤
-    logger.error("Failed to setup TLS CA certificates: \(error.localizedDescription, privacy: .public)")
+let ctx = SSL_CTX_new(TLS_client_method())
+if CacertManager.shared.configure(ctx) {
+    // CA 凭证加载成功
+} else {
+    logger.error("Failed to setup TLS CA certificates")
 }
 ```
 
@@ -86,17 +85,9 @@ do {
 | 成员 | 说明 |
 |---|---|
 | `CacertManager.shared` | 全局单例实例 |
-| `init(fileManager:bundle:)` | 支持依赖注入的初始化器，便于单元测试 |
-| `certificatePath` | 解析后的 `cacert.pem` 绝对路径，未找到时为 `nil` |
-| `configure(_ ctx:)` | 通过 `SSL_CTX_load_verify_locations` 将 CA 凭证加载到 `SSL_CTX`；失败时抛出 `OpenSSLCACertificateError` |
-
-### 错误类型
-
-| Case | 含义 |
-|---|---|
-| `.bundlePathNotFound` | 在 Bundle 或 Application Support 中未找到 `cacert.pem` |
-| `.failedToSetVerifyLocations(path:opensslError:)` | OpenSSL 加载凭证文件失败 |
-| `.invalidContextPointer` | 传入的 `SSL_CTX` 指针为 `nil` |
+| `certificatePath` | `cacert.pem` 的绝对路径，未找到时为 `nil` |
+| `certificateContent` | `cacert.pem` 的完整文本内容 |
+| `configure(_ ctx:)` | 将 CA 凭证加载到 `SSL_CTX`；成功返回 `true` |
 
 ## 项目结构
 
