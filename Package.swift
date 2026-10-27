@@ -10,11 +10,21 @@ let package = Package(
     ],
     products: [
         .library(name: "OpenSSL", targets: ["OpenSSL"]),
+        .library(name: "Cacert", targets: ["Cacert"]),
     ],
     targets: [
         .binaryTarget(
             name: "OpenSSL",
             path: "OpenSSL.xcframework"
+        ),
+        .target(
+            name: "Cacert",
+            dependencies: [
+                "OpenSSL",
+            ],
+            resources: [
+                .process("Resources"),
+            ]
         ),
     ]
 )

@@ -65,11 +65,49 @@ In CMake:
 -DOPENSSL_LIBRARIES="${OPENSSL_BUILD_DIR}/build/install_${target_id}/lib/libssl.a;${OPENSSL_BUILD_DIR}/build/install_${target_id}/lib/libcrypto.a"
 ```
 
+## CA Certificate Management
+
+The `CacertManager` (in `Sources/Cacert/`) bundles a `cacert.pem` and applies it to an OpenSSL `SSL_CTX` for TLS certificate verification. It resolves the certificate path from `Bundle.module` first, then falls back to the Application Support directory.
+
+```swift
+import OpenSSL
+
+do {
+    let ctx = SSL_CTX_new(TLS_client_method())
+    try CacertManager.shared.configure(ctx)
+} catch {
+    // Use your own logging system here
+    logger.error("Failed to setup TLS CA certificates: \(error.localizedDescription, privacy: .public)")
+}
+```
+
+### API
+
+| Member | Description |
+|---|---|
+| `CacertManager.shared` | Global singleton instance |
+| `init(fileManager:bundle:)` | Initializer with dependency injection for unit testing |
+| `certificatePath` | Resolved absolute path to `cacert.pem`, or `nil` |
+| `configure(_ ctx:)` | Applies CA bundle to `SSL_CTX` via `SSL_CTX_load_verify_locations`; throws `OpenSSLCACertificateError` |
+
+### Errors
+
+| Case | Meaning |
+|---|---|
+| `.bundlePathNotFound` | `cacert.pem` not found in bundle or Application Support |
+| `.failedToSetVerifyLocations(path:opensslError:)` | OpenSSL failed to load the certificate file |
+| `.invalidContextPointer` | The `SSL_CTX` pointer is `nil` |
+
 ## Project Structure
 
 ```
 OpenSSL/
 ├── build_xcframework.sh       # Build script (size-optimized)
+├── Sources/
+│   └── Cacert/
+│       ├── Cacert.swift        # CacertManager — CA certificate loader
+│       └── Resources/
+│           └── cacert.pem      # Bundled CA certificate bundle
 └── xcframework/
     └── OpenSSL.xcframework/   # Precompiled xcframework (iOS + macOS)
         ├── Info.plist
