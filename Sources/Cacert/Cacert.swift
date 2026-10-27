@@ -17,7 +17,7 @@ public final class CacertManager: Sendable {
 
     /// cacert.pem 的绝对路径，未找到时为 nil
     public var certificatePath: String? {
-        return cachedCertPath
+        cachedCertPath
     }
 
     /// cacert.pem 的完整文本内容
