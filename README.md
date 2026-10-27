@@ -6,32 +6,6 @@ A size-optimized OpenSSL static library for the FoxTerm app — built from [Open
 
 > This library is a dedicated core component for the [FoxTerm](https://foxterm.app/) app. Download it here: [https://foxterm.app/](https://foxterm.app/)
 
-## Features
-
-- **Precision Trimming** — Source-code scanning of libssh/libvncserver to retain only used APIs
-- **Aggressive Size Optimization** — `-Oz` compilation + `-fvisibility=hidden` + `strip -x`
-- **Out-of-tree Builds** — No source tree copying, faster iteration
-- **Single Library Output** — Merged `libssl.a` + `libcrypto.a` into one `libopenssl.a`
-- **Multi-architecture** — macOS (arm64/x86_64 universal), iOS device (arm64), iOS simulator (arm64)
-
-## Retained Algorithms
-
-| Category | Algorithms | Used By |
-|----------|-----------|---------|
-| Symmetric | AES (CBC/CTR/GCM/ECB), DES/3DES, Blowfish, ChaCha20-Poly1305 | libssh, libvncserver |
-| Hash | SHA1, SHA256, SHA384, SHA512, MD5 | libssh, libvncserver |
-| Public Key | RSA, ECDSA, Ed25519/X25519, ECDH, DH | libssh |
-| TLS/SSL | TLS 1.2+, X509 certificate verification | libvncserver |
-| HMAC | HMAC-SHA1/256/384/512, HMAC-MD5 | libssh |
-
-## Removed Content
-
-- **Legacy protocols**: SSL3, TLS 1.0/1.1, DTLS family
-- **Unused ciphers**: ARIA, Camellia, CAST, IDEA, RC2, RC5, SEED, SM2/3/4, Whirlpool, BLAKE2, RIPEMD160, MD4
-- **Unused features**: OCB, CT, PSK, SRP, SRTP, SCRYPT, TS, CMS, GOST, KTLS, FIPS, Legacy provider
-- **Engines / dynamic modules**: engine, static-engine, module
-- **Miscellaneous**: filenames, pinshared, autoload-config, uplink, dgram
-
 ## Requirements
 
 | Platform | Minimum Version |
