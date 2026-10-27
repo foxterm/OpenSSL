@@ -39,31 +39,13 @@ FoxTerm APP 专用 OpenSSL 静态库，基于 [OpenSSL 4.0.3](https://github.com
 | iOS  | 17.0    |
 | macOS | 14.0   |
 
-## 快速开始
+## 构建
 
-```bash
-git clone https://github.com/foxterm/OpenSSL.git
-cd OpenSSL
-./build_xcframework.sh
-```
-
-构建产物位于 `xcframework/OpenSSL.xcframework`。
+`OpenSSL.xcframework` 由 [xcframework_build](https://github.com/foxterm/xcframework_build) CI/CD 流水线自动编译并推送到本仓库，正常使用无需手动构建。
 
 ## 集成方式
 
-其他 FoxTerm 子项目（SSH、VNC）通过相对路径引用此预编译产物：
-
-```bash
-OPENSSL_BUILD_DIR="$(pwd)/../OpenSSL/openssl_xcframework_build"
-```
-
-CMake 中指定：
-
-```cmake
--DOPENSSL_ROOT_DIR="${OPENSSL_BUILD_DIR}/build/install_${target_id}"
--DOPENSSL_INCLUDE_DIR="${OPENSSL_BUILD_DIR}/build/install_${target_id}/include"
--DOPENSSL_LIBRARIES="${OPENSSL_BUILD_DIR}/build/install_${target_id}/lib/libssl.a;${OPENSSL_BUILD_DIR}/build/install_${target_id}/lib/libcrypto.a"
-```
+本库通过 Swift Package Manager 或 CocoaPods 以预编译 XCFramework 形式消费。仓库根目录的 `OpenSSL.xcframework` 由 [xcframework_build](https://github.com/foxterm/xcframework_build) 自动编译和更新。
 
 ## CA 凭证管理
 
@@ -93,18 +75,13 @@ if CacertManager.shared.configure(ctx) {
 
 ```
 OpenSSL/
-├── build_xcframework.sh       # 构建脚本（体积优化版）
 ├── Sources/
 │   └── Cacert/
-│       ├── Cacert.swift        # CacertManager — CA 凭证加载器
+│       ├── Cacert.swift            # CacertManager — CA 凭证加载器
 │       └── Resources/
-│           └── cacert.pem      # 内嵌 CA 凭证文件
-└── xcframework/
-    └── OpenSSL.xcframework/   # 预编译 xcframework（iOS + macOS）
-        ├── Info.plist
-        ├── ios-arm64/
-        ├── ios-arm64-simulator/
-        └── macos-arm64_x86_64/
+│           └── cacert.pem          # 内嵌 CA 凭证文件
+├── OpenSSL.xcframework/            # 预编译 xcframework（CI 自动构建）
+└── Package.swift
 ```
 
 ## 许可证

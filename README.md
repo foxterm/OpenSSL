@@ -39,31 +39,13 @@ A size-optimized OpenSSL static library for the FoxTerm app — built from [Open
 | iOS      | 17.0           |
 | macOS    | 14.0           |
 
-## Quick Start
+## Build
 
-```bash
-git clone https://github.com/foxterm/OpenSSL.git
-cd OpenSSL
-./build_xcframework.sh
-```
-
-Build output: `xcframework/OpenSSL.xcframework`.
+The `OpenSSL.xcframework` is automatically built by [xcframework_build](https://github.com/foxterm/xcframework_build) CI/CD pipeline and pushed to this repository. Manual building is not required for normal usage.
 
 ## Integration
 
-Other FoxTerm subprojects (SSH, VNC) reference this precompiled artifact via relative path:
-
-```bash
-OPENSSL_BUILD_DIR="$(pwd)/../OpenSSL/openssl_xcframework_build"
-```
-
-In CMake:
-
-```cmake
--DOPENSSL_ROOT_DIR="${OPENSSL_BUILD_DIR}/build/install_${target_id}"
--DOPENSSL_INCLUDE_DIR="${OPENSSL_BUILD_DIR}/build/install_${target_id}/include"
--DOPENSSL_LIBRARIES="${OPENSSL_BUILD_DIR}/build/install_${target_id}/lib/libssl.a;${OPENSSL_BUILD_DIR}/build/install_${target_id}/lib/libcrypto.a"
-```
+This library is consumed as a prebuilt XCFramework via Swift Package Manager or CocoaPods. The `OpenSSL.xcframework` at the repository root is automatically built and updated by [xcframework_build](https://github.com/foxterm/xcframework_build).
 
 ## CA Certificate Management
 
@@ -93,18 +75,13 @@ if CacertManager.shared.configure(ctx) {
 
 ```
 OpenSSL/
-├── build_xcframework.sh       # Build script (size-optimized)
 ├── Sources/
 │   └── Cacert/
-│       ├── Cacert.swift        # CacertManager — CA certificate loader
+│       ├── Cacert.swift            # CacertManager — CA certificate loader
 │       └── Resources/
-│           └── cacert.pem      # Bundled CA certificate bundle
-└── xcframework/
-    └── OpenSSL.xcframework/   # Precompiled xcframework (iOS + macOS)
-        ├── Info.plist
-        ├── ios-arm64/
-        ├── ios-arm64-simulator/
-        └── macos-arm64_x86_64/
+│           └── cacert.pem          # Bundled CA certificate bundle
+├── OpenSSL.xcframework/            # Precompiled xcframework (auto-built by CI)
+└── Package.swift
 ```
 
 ## License
